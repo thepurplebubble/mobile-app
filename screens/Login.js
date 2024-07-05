@@ -7,6 +7,10 @@ const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const openRegisterScreen = () => {
+      navigation.navigate('Register');
+    };
+
     return (
         <View style={styles.container}>
             <Input
@@ -25,7 +29,7 @@ const Login = ({navigation}) => {
                 secureTextEntry
             />
             <Button title='sign in' style={styles.button} />
-            <Button title='register' style={styles.button} />
+            <Button title="register" style={styles.button} onPress={openRegisterScreen} />
         </View>
     )
 }
@@ -41,3 +45,5 @@ const styles = StyleSheet.create({
         marginTop: 10
     }
 });
+
+export default Login;

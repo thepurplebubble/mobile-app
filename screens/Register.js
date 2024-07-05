@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [avatar, setAvatar] = useState('');
+
+    const register = () => {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Registered
+            const user = userCredential.user;
+            updateProfile(user, {
+                displayName: name,
+                photoURL: avatar ? avatar : 'https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x',
+            })
+            .then(() => {
+              alert('Registered, please login.');
+            })
+            .catch((error) => {
+                alert(error.message);
+            })
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+        });
+    }
 
     return (
         <View style={styles.container}>
@@ -34,7 +59,7 @@ const Register = () => {
                 value = {avatar}
                 onChangeText={text => setAvatar(text)}
             />
-            <Button title='register' style={styles.button} />
+            <Button title='register' onPress={register} style={styles.button} />
         </View>
     )
 }
