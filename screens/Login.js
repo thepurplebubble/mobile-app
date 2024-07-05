@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Login = ({navigation}) => {
@@ -9,6 +11,18 @@ const Login = ({navigation}) => {
 
     const openRegisterScreen = () => {
       navigation.navigate('Register');
+    };
+
+    const signin = () => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          navigation.navigate('Chat');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
     };
 
     return (
@@ -28,7 +42,7 @@ const Login = ({navigation}) => {
                 onChangeText={text => setPassword(text)}
                 secureTextEntry
             />
-            <Button title='sign in' style={styles.button} />
+            <Button title="sign in" style={styles.button} onPress={signin} />
             <Button title="register" style={styles.button} onPress={openRegisterScreen} />
         </View>
     )
